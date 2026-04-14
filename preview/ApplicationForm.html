@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>USDS Application</title>
+    <style>
+        :root {
+            --space-xs: 0.375rem;
+            --space-s: 0.75rem;
+            --space-m: 1.5rem;
+            --space-l: 2.25rem;
+            --space-xl: 3rem;
+            --space-2xl: 4.5rem;
+
+            --fs-h2: clamp(1.75rem, 3vw, 2.25rem);
+            --fs-h5: 1.125rem;
+            --fs-body: 1rem;
+            --fs-meta: 0.85rem;
+            --fs-meta-smaller: 0.7rem;
+            --fw-body: 300;
+            --fw-subtitle: 500;
+            --fw-title: 600;
+
+            --primary-light: hsl(204, 15%, 92.5%);
+            --primary-light-muted: hsla(204, 15%, 92.5%, 0.6);
+            --primary-dark: hsl(204, 15%, 7.5%);
+            --primary-color: hsl(204, 100%, 40%);
+            --primary-color-light: hsl(204, 80%, 65%);
+            --secondary-color: hsl(202, 100%, 55%);
+            --tertiary-color: rgba(42, 219, 192, 0.85);
+            --accent-yellow: hsl(48, 100%, 50%);
+            --error-color: hsl(0, 72%, 60%);
+
+            --glass-bg: hsla(204, 20%, 12%, 0.65);
+            --glass-border: hsla(204, 15%, 92.5%, 0.1);
+            --glass-hover: hsla(204, 15%, 92.5%, 0.05);
+
+            --radius-card: 24px;
+            --radius-input: 10px;
+            --radius-pill: 999px;
+
+            --backdrop-blur: 20px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            --shadow-s: 0 2px 8px hsla(0, 0%, 0%, 0.2);
+            --shadow-m: 0 4px 24px hsla(0, 0%, 0%, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--primary-light);
+            line-height: 1.7;
+            font-weight: var(--fw-body);
+            letter-spacing: 0.01em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        .flag-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .flag-bg .flag {
+            position: absolute;
+            font-size: 64px;
+            opacity: 0.04;
+            filter: grayscale(0.3);
+            user-select: none;
+        }
+
+        .flag-bg .flag:nth-child(1)  { top: 3%;   left: 5%;   transform: rotate(-15deg); font-size: 72px; }
+        .flag-bg .flag:nth-child(2)  { top: 8%;   right: 8%;  transform: rotate(20deg);  font-size: 56px; }
+        .flag-bg .flag:nth-child(3)  { top: 18%;  left: 80%;  transform: rotate(-8deg);  font-size: 48px; }
+        .flag-bg .flag:nth-child(4)  { top: 25%;  left: 2%;   transform: rotate(12deg);  font-size: 60px; }
+        .flag-bg .flag:nth-child(5)  { top: 35%;  right: 3%;  transform: rotate(-22deg); font-size: 52px; }
+        .flag-bg .flag:nth-child(6)  { top: 42%;  left: 8%;   transform: rotate(5deg);   font-size: 44px; }
+        .flag-bg .flag:nth-child(7)  { top: 52%;  right: 6%;  transform: rotate(18deg);  font-size: 68px; }
+        .flag-bg .flag:nth-child(8)  { top: 58%;  left: 3%;   transform: rotate(-10deg); font-size: 50px; }
+        .flag-bg .flag:nth-child(9)  { top: 68%;  right: 10%; transform: rotate(25deg);  font-size: 56px; }
+        .flag-bg .flag:nth-child(10) { top: 72%;  left: 6%;   transform: rotate(-18deg); font-size: 64px; }
+        .flag-bg .flag:nth-child(11) { top: 82%;  right: 4%;  transform: rotate(8deg);   font-size: 48px; }
+        .flag-bg .flag:nth-child(12) { top: 88%;  left: 10%;  transform: rotate(-25deg); font-size: 58px; }
+        .flag-bg .flag:nth-child(13) { top: 15%;  left: 45%;  transform: rotate(30deg);  font-size: 40px; opacity: 0.025; }
+        .flag-bg .flag:nth-child(14) { top: 48%;  left: 50%;  transform: rotate(-12deg); font-size: 36px; opacity: 0.02; }
+        .flag-bg .flag:nth-child(15) { top: 78%;  left: 42%;  transform: rotate(15deg);  font-size: 44px; opacity: 0.025; }
+        .flag-bg .flag:nth-child(16) { top: 5%;   left: 30%;  transform: rotate(10deg);  font-size: 38px; }
+        .flag-bg .flag:nth-child(17) { top: 12%;  right: 25%; transform: rotate(-20deg); font-size: 54px; }
+        .flag-bg .flag:nth-child(18) { top: 22%;  left: 55%;  transform: rotate(35deg);  font-size: 42px; opacity: 0.03; }
+        .flag-bg .flag:nth-child(19) { top: 30%;  left: 15%;  transform: rotate(-5deg);  font-size: 46px; }
+        .flag-bg .flag:nth-child(20) { top: 38%;  right: 20%; transform: rotate(28deg);  font-size: 58px; }
+        .flag-bg .flag:nth-child(21) { top: 45%;  left: 70%;  transform: rotate(-30deg); font-size: 40px; }
+        .flag-bg .flag:nth-child(22) { top: 55%;  left: 25%;  transform: rotate(15deg);  font-size: 50px; }
+        .flag-bg .flag:nth-child(23) { top: 62%;  right: 15%; transform: rotate(-8deg);  font-size: 62px; }
+        .flag-bg .flag:nth-child(24) { top: 75%;  left: 60%;  transform: rotate(22deg);  font-size: 44px; opacity: 0.03; }
+        .flag-bg .flag:nth-child(25) { top: 85%;  right: 30%; transform: rotate(-15deg); font-size: 52px; }
+        .flag-bg .flag:nth-child(26) { top: 92%;  left: 35%;  transform: rotate(18deg);  font-size: 48px; }
+        .flag-bg .flag:nth-child(27) { top: 95%;  right: 5%;  transform: rotate(-25deg); font-size: 60px; }
+        .flag-bg .flag:nth-child(28) { top: 2%;   left: 65%;  transform: rotate(8deg);   font-size: 36px; opacity: 0.03; }
+        .flag-bg .flag:nth-child(29) { top: 33%;  left: 88%;  transform: rotate(-18deg); font-size: 46px; }
+        .flag-bg .flag:nth-child(30) { top: 65%;  left: 92%;  transform: rotate(12deg);  font-size: 42px; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-m);
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-title {
+            font-size: var(--fs-h2);
+            font-weight: var(--fw-title);
+            color: var(--primary-light);
+            margin-bottom: var(--space-xs);
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        .form-subtitle {
+            color: var(--primary-light-muted);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            font-size: var(--fs-body);
+        }
+
+        .form-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--backdrop-blur));
+            -webkit-backdrop-filter: blur(var(--backdrop-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-card);
+            margin-bottom: var(--space-m);
+            overflow: hidden;
+            box-shadow: var(--shadow-s);
+        }
+
+        /* Accordion Styles */
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-m) var(--space-l);
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: var(--fs-body);
+            font-weight: var(--fw-subtitle);
+            color: var(--primary-light);
+            transition: background-color var(--transition-fast);
+        }
+
+        .accordion-header:hover {
+            background: var(--glass-hover);
+        }
+
+        .accordion-header.active {
+            background: hsla(204, 20%, 15%, 0.4);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .accordion-icon {
+            font-size: 12px;
+            transition: transform var(--transition-normal);
+            color: var(--primary-light-muted);
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            display: none;
+            padding: var(--space-m);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+
+        .section-description {
+            color: var(--primary-light-muted);
+            font-size: var(--fs-meta);
+            margin-bottom: var(--space-m);
+        }
+
+        /* Form Elements */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-s);
+            margin-bottom: var(--space-s);
+        }
+
+        .form-row.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-s);
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--fs-meta);
+            font-weight: var(--fw-subtitle);
+            color: var(--primary-light);
+            margin-bottom: var(--space-xs);
+        }
+
+        .form-label .optional {
+            color: hsla(204, 15%, 92.5%, 0.35);
+            font-weight: var(--fw-body);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: var(--space-s) var(--space-m);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-input);
+            font-size: var(--fs-body);
+            font-family: inherit;
+            color: var(--primary-light);
+            background: hsla(204, 20%, 15%, 0.5);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .form-select option {
+            background: hsl(204, 20%, 12%);
+            color: var(--primary-light);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px hsla(204, 100%, 40%, 0.15);
+        }
+
+        .form-input::placeholder {
+            color: hsla(204, 15%, 92.5%, 0.3);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Chip/Tag Selectors */
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-top: var(--space-s);
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-xs) var(--space-m);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-pill);
+            font-size: var(--fs-meta);
+            color: var(--primary-light-muted);
+            background: transparent;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .chip:hover {
+            border-color: hsla(204, 15%, 92.5%, 0.2);
+            background: var(--glass-hover);
+            color: var(--primary-light);
+        }
+
+        .chip.selected {
+            border-color: var(--primary-color);
+            background: hsla(204, 100%, 40%, 0.15);
+            color: var(--primary-color-light);
+        }
+
+        /* Category/Skills Section */
+        .category-section, .skills-section {
+            margin-top: var(--space-l);
+            padding-top: var(--space-l);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .category-label {
+            font-size: var(--fs-meta);
+            font-weight: var(--fw-subtitle);
+            color: var(--primary-light);
+            margin-bottom: var(--space-s);
+        }
+
+        /* Question Block */
+        .question-block {
+            margin-bottom: var(--space-l);
+            padding-bottom: var(--space-l);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .question-block:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .question-title {
+            font-size: var(--fs-h5);
+            font-weight: var(--fw-subtitle);
+            color: var(--primary-light);
+            margin-bottom: var(--space-xs);
+        }
+
+        .question-helper {
+            font-size: var(--fs-meta);
+            color: var(--primary-light-muted);
+            margin-bottom: var(--space-m);
+            font-style: normal;
+        }
+
+        .legal-ref {
+            font-size: var(--fs-meta-smaller);
+            color: hsla(204, 15%, 92.5%, 0.35);
+            margin-top: var(--space-s);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-s);
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-s);
+            padding: var(--space-s) var(--space-m);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .radio-option:hover {
+            border-color: hsla(204, 15%, 92.5%, 0.2);
+            background: var(--glass-hover);
+        }
+
+        .radio-option.selected {
+            border-color: var(--primary-color);
+            background: hsla(204, 100%, 40%, 0.08);
+        }
+
+        .radio-option input[type="radio"] {
+            margin-top: 2px;
+            accent-color: var(--primary-color);
+        }
+
+        .radio-text {
+            flex: 1;
+            font-size: var(--fs-meta);
+            color: var(--primary-light);
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed hsla(204, 15%, 92.5%, 0.15);
+            border-radius: 16px;
+            padding: var(--space-2xl) var(--space-l);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background: hsla(204, 100%, 40%, 0.04);
+        }
+
+        .file-upload-text {
+            font-weight: var(--fw-subtitle);
+            color: var(--primary-light);
+            margin-bottom: var(--space-xs);
+        }
+
+        .file-upload-hint {
+            font-size: var(--fs-meta);
+            color: hsla(204, 15%, 92.5%, 0.35);
+        }
+
+        /* Submit Button */
+        .submit-section {
+            display: flex;
+            gap: var(--space-s);
+            margin-top: var(--space-xl);
+            padding-top: var(--space-l);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .btn {
+            padding: var(--space-s) var(--space-l);
+            border-radius: var(--radius-pill);
+            font-size: var(--fs-body);
+            font-weight: var(--fw-subtitle);
+            font-family: inherit;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            box-shadow: 0 4px 16px hsla(204, 100%, 40%, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-light);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass-hover);
+            border-color: hsla(204, 15%, 92.5%, 0.2);
+        }
+
+        /* Hidden by default */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: var(--space-m);
+            }
+
+            .accordion-content {
+                padding: var(--space-m);
+            }
+
+            .form-card {
+                border-radius: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flag-bg">
+        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+    </div>
+    <div class="container">
+        <h1 class="form-title">Apply to USDS</h1>
+        <p class="form-subtitle">Help us match you with the right role by telling us about your background and interests.</p>
+
+        <form id="applicationForm">
+            <!-- Section 1: Contact Information -->
+            <div class="form-card">
+                <div class="accordion-header active" onclick="toggleSection('contact')">
+                    <span>Contact Information</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-content active" id="contact-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" placeholder="Jane"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" placeholder="Smith"/>
+                        </div>
+                    </div>
+
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="jane.smith@email.com"/>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Phone <span class="optional">(Optional)</span></label>
+                            <input type="tel" class="form-input" placeholder="(555) 123-4567"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">LinkedIn <span class="optional">(Optional)</span></label>
+                            <input type="text" class="form-input" placeholder="linkedin.com/in/janesmith"/>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Current Location</label>
+                            <select class="form-select">
+                                <option value="">Select state...</option>
+                                <option value="AL">Alabama</option>
+                                <option value="AK">Alaska</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="CA">California</option>
+                                <option value="CO">Colorado</option>
+                                <option value="DC">District of Columbia</option>
+                                <option value="FL">Florida</option>
+                                <option value="GA">Georgia</option>
+                                <option value="IL">Illinois</option>
+                                <option value="MA">Massachusetts</option>
+                                <option value="MD">Maryland</option>
+                                <option value="NY">New York</option>
+                                <option value="TX">Texas</option>
+                                <option value="VA">Virginia</option>
+                                <option value="WA">Washington</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Earliest Start Date</label>
+                            <input type="date" class="form-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Role & Skills -->
+            <div class="form-card">
+                <div class="accordion-header" onclick="toggleSection('role')">
+                    <span>Role &amp; Skills</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-content" id="role-content">
+                    <p class="section-description">What type of work are you looking for?</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Primary Role</label>
+                        <select class="form-select" id="roleSelect" onchange="onRoleChange()">
+                            <option value="">Select a role...</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="AI and Machine Learning">AI and Machine Learning</option>
+                            <option value="Product">Product</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Design">Design</option>
+                            <option value="Talent">Talent</option>
+                            <option value="Legal">Legal</option>
+                            <option value="Executive">Executive</option>
+                            <option value="Procurement">Procurement</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Cybersecurity">Cybersecurity</option>
+                            <option value="Operations">Operations</option>
+                            <option value="Communications">Communications</option>
+                            <option value="Policy">Policy</option>
+                        </select>
+                    </div>
+
+                    <!-- Categories (shown when role is selected) -->
+                    <div class="category-section hidden" id="categorySection">
+                        <label class="category-label">Select Categories</label>
+                        <p class="section-description">Choose the areas where you have expertise.</p>
+                        <div class="chip-container" id="categoryChips"></div>
+                    </div>
+
+                    <!-- Skills (shown when categories are selected) -->
+                    <div class="skills-section hidden" id="skillsSection">
+                        <label class="category-label">Select Skills</label>
+                        <p class="section-description">Select all that apply to help us match you with the right projects.</p>
+                        <div class="chip-container" id="skillsChips"></div>
+                    </div>
+
+                    <div class="form-row" style="margin-top: var(--space-l);">
+                        <div class="form-group">
+                            <label class="form-label">Years of Experience</label>
+                            <select class="form-select">
+                                <option value="">Select range...</option>
+                                <option value="0-2">0-2 years</option>
+                                <option value="3-5">3-5 years</option>
+                                <option value="6-10">6-10 years</option>
+                                <option value="11-15">11-15 years</option>
+                                <option value="15+">15+ years</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Target Level</label>
+                            <select class="form-select">
+                                <option value="">Select level...</option>
+                                <option value="IC">Individual Contributor</option>
+                                <option value="Senior IC">Senior Individual Contributor</option>
+                                <option value="Lead">Lead / Principal</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Director">Director</option>
+                                <option value="Executive">Executive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Eligibility & Clearance -->
+            <div class="form-card">
+                <div class="accordion-header" onclick="toggleSection('eligibility')">
+                    <span>Eligibility &amp; Clearance</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-content" id="eligibility-content">
+                    <div class="question-block">
+                        <p class="question-title">Do you currently hold a security clearance?</p>
+                        <p class="question-helper">Some roles require security clearances. This helps us identify opportunities.</p>
+                        <div class="radio-group">
+                            <label class="radio-option" onclick="selectClearance('yes')">
+                                <input type="radio" name="hasClearance" value="yes"/>
+                                <span class="radio-text">Yes</span>
+                            </label>
+                            <label class="radio-option" onclick="selectClearance('no')">
+                                <input type="radio" name="hasClearance" value="no"/>
+                                <span class="radio-text">No</span>
+                            </label>
+                        </div>
+
+                        <!-- Clearance level dropdown - only shown if Yes -->
+                        <div class="form-group hidden" id="clearanceLevelGroup" style="margin-top: var(--space-m);">
+                            <label class="form-label">What level of clearance do you hold?</label>
+                            <select class="form-select" id="clearanceLevel">
+                                <option value="">Select clearance level...</option>
+                                <option value="public-trust">Public Trust</option>
+                                <option value="secret">Secret</option>
+                                <option value="top-secret">Top Secret</option>
+                                <option value="ts-sci">TS/SCI</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-title">Have you previously worked for the federal government?</p>
+                        <div class="radio-group">
+                            <label class="radio-option" onclick="selectRadio(this)">
+                                <input type="radio" name="fedwork" value="yes"/>
+                                <span class="radio-text">Yes</span>
+                            </label>
+                            <label class="radio-option" onclick="selectRadio(this)">
+                                <input type="radio" name="fedwork" value="no"/>
+                                <span class="radio-text">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Resume & Additional Info -->
+            <div class="form-card">
+                <div class="accordion-header" onclick="toggleSection('resume')">
+                    <span>Resume &amp; Additional Info</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-content" id="resume-content">
+                    <p class="section-description">Share your background and anything else you'd like us to know.</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Upload Resume</label>
+                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                            <input type="file" id="fileInput" style="display: none;" accept=".pdf"/>
+                            <p class="file-upload-text">Click to upload or drag and drop</p>
+                            <p class="file-upload-hint">PDF only, 2 pages max, 5MB limit</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Portfolio or GitHub <span class="optional">(Optional)</span></label>
+                        <input type="url" class="form-input" placeholder="https://github.com/janesmith"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Why are you interested in USDS? <span class="optional">(Optional)</span></label>
+                        <textarea class="form-textarea" placeholder="Tell us what draws you to public service and what you hope to accomplish..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">How did you hear about us?</label>
+                        <select class="form-select">
+                            <option value="">Select one...</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="referral">Friend or colleague referral</option>
+                            <option value="news">News article</option>
+                            <option value="event">Conference or event</option>
+                            <option value="social">Social media</option>
+                            <option value="search">Web search</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="submit-section">
+                        <button type="button" class="btn btn-primary" onclick="submitForm()">Submit Application</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Skills data structure: Role -> Category -> Skills
+        const skillsData = {
+            'Engineering': {
+                'Languages': ['Python', 'JavaScript', 'TypeScript', 'Java', 'Go', 'Ruby', 'C++', 'C#'],
+                'Databases': ['SQL', 'PostgreSQL', 'MongoDB', 'Redis'],
+                'Cloud': ['AWS', 'Azure', 'GCP'],
+                'Infrastructure': ['Kubernetes', 'Docker', 'Terraform', 'CI/CD'],
+                'Frontend': ['React', 'Node.js', 'Vue', 'Angular'],
+                'Backend': ['REST APIs', 'GraphQL', 'Microservices'],
+                'Mobile': ['iOS', 'Android', 'React Native'],
+                'Other': ['Git', 'Linux', 'Security', 'Agile']
+            },
+            'Data Science': {
+                'Languages': ['Python', 'SQL', 'R'],
+                'Tools': ['Tableau', 'Power BI', 'Looker', 'Excel', 'Jupyter'],
+                'Platforms': ['Snowflake', 'BigQuery', 'Databricks', 'Spark'],
+                'Skills': ['Statistics', 'Data Modeling', 'ETL', 'Data Visualization', 'A/B Testing', 'Data Governance', 'dbt']
+            },
+            'AI and Machine Learning': {
+                'Frameworks': ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Keras', 'Hugging Face'],
+                'LLMs': ['OpenAI API', 'Langchain', 'Prompt Engineering', 'Fine-tuning', 'RAG'],
+                'Specialties': ['NLP', 'Computer Vision', 'Deep Learning', 'Neural Networks', 'Reinforcement Learning', 'Generative AI'],
+                'Operations': ['MLOps', 'Model Deployment', 'Feature Engineering', 'Model Evaluation'],
+                'Other': ['AI Ethics', 'Python']
+            },
+            'Product': {
+                'Core': ['Roadmapping', 'Product Strategy', 'User Stories', 'PRDs', 'Prioritization', 'OKRs'],
+                'Research': ['User Interviews', 'Customer Discovery', 'Market Research', 'Competitive Analysis', 'A/B Testing'],
+                'Tools': ['Jira', 'Confluence', 'Amplitude', 'Mixpanel', 'SQL'],
+                'Methods': ['Agile', 'Scrum', 'Stakeholder Management', 'Go-to-Market', 'Wireframing']
+            },
+            'Design': {
+                'Tools': ['Figma', 'Sketch', 'Adobe Creative Suite', 'InVision', 'Miro'],
+                'Research': ['User Research', 'Usability Testing', 'Journey Mapping', 'Personas'],
+                'Skills': ['Prototyping', 'Wireframing', 'Visual Design', 'Interaction Design', 'Information Architecture', 'Design Systems', 'Accessibility', 'Responsive Design'],
+                'Specialties': ['Service Design', 'Content Design', 'Motion Design', 'Mobile Design'],
+                'Technical': ['HTML/CSS']
+            },
+            'Cybersecurity': {
+                'Offensive': ['Penetration Testing', 'Vulnerability Assessment', 'Red Team'],
+                'Defensive': ['SOC', 'Incident Response', 'Threat Intelligence', 'Blue Team'],
+                'Infrastructure': ['Network Security', 'Cloud Security', 'Identity Management', 'Zero Trust'],
+                'Compliance': ['FedRAMP', 'FISMA', 'NIST', 'SOC 2'],
+                'Tools': ['SIEM', 'Splunk', 'CrowdStrike']
+            },
+            'Policy': {
+                'Analysis': ['Policy Analysis', 'Regulatory Analysis', 'Research', 'Data Analysis'],
+                'Government': ['Legislative Affairs', 'Government Affairs', 'Public Policy', 'Interagency Coordination'],
+                'Skills': ['Policy Writing', 'Briefings', 'Stakeholder Engagement', 'Coalition Building']
+            }
+        };
+
+        let selectedCategories = [];
+        let selectedSkills = [];
+
+        // Accordion toggle
+        function toggleSection(section) {
+            const content = document.getElementById(section + '-content');
+            const header = content.previousElementSibling;
+
+            // Close all other sections
+            document.querySelectorAll('.accordion-content').forEach(el => {
+                if (el.id !== section + '-content') {
+                    el.classList.remove('active');
+                    el.previousElementSibling.classList.remove('active');
+                }
+            });
+
+            // Toggle current section
+            content.classList.toggle('active');
+            header.classList.toggle('active');
+        }
+
+        // Role change handler
+        function onRoleChange() {
+            const role = document.getElementById('roleSelect').value;
+            const categorySection = document.getElementById('categorySection');
+            const skillsSection = document.getElementById('skillsSection');
+            const categoryChips = document.getElementById('categoryChips');
+
+            selectedCategories = [];
+            selectedSkills = [];
+
+            if (role && skillsData[role]) {
+                const categories = Object.keys(skillsData[role]);
+                categoryChips.innerHTML = categories.map(cat =>
+                    `<span class="chip" onclick="toggleCategory('${cat}')">${cat}</span>`
+                ).join('');
+                categorySection.classList.remove('hidden');
+            } else {
+                categorySection.classList.add('hidden');
+            }
+
+            skillsSection.classList.add('hidden');
+            document.getElementById('skillsChips').innerHTML = '';
+        }
+
+        // Category toggle
+        function toggleCategory(category) {
+            const chip = event.target;
+            const role = document.getElementById('roleSelect').value;
+
+            if (selectedCategories.includes(category)) {
+                selectedCategories = selectedCategories.filter(c => c !== category);
+                chip.classList.remove('selected');
+            } else {
+                selectedCategories.push(category);
+                chip.classList.add('selected');
+            }
+
+            updateSkills(role);
+        }
+
+        // Update skills based on selected categories
+        function updateSkills(role) {
+            const skillsSection = document.getElementById('skillsSection');
+            const skillsChips = document.getElementById('skillsChips');
+
+            if (selectedCategories.length > 0) {
+                let allSkills = [];
+                selectedCategories.forEach(cat => {
+                    if (skillsData[role] && skillsData[role][cat]) {
+                        allSkills = allSkills.concat(skillsData[role][cat]);
+                    }
+                });
+
+                // Remove duplicates
+                allSkills = [...new Set(allSkills)];
+
+                skillsChips.innerHTML = allSkills.map(skill =>
+                    `<span class="chip ${selectedSkills.includes(skill) ? 'selected' : ''}" onclick="toggleSkill('${skill}')">${skill}</span>`
+                ).join('');
+                skillsSection.classList.remove('hidden');
+            } else {
+                skillsSection.classList.add('hidden');
+                selectedSkills = [];
+            }
+        }
+
+        // Skill toggle
+        function toggleSkill(skill) {
+            const chip = event.target;
+
+            if (selectedSkills.includes(skill)) {
+                selectedSkills = selectedSkills.filter(s => s !== skill);
+                chip.classList.remove('selected');
+            } else {
+                selectedSkills.push(skill);
+                chip.classList.add('selected');
+            }
+        }
+
+        // Radio selection
+        function selectRadio(element) {
+            const group = element.parentElement;
+            group.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // Clearance selection - show/hide level dropdown
+        function selectClearance(value) {
+            const radioGroup = event.target.closest('.radio-group');
+            radioGroup.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.radio-option').classList.add('selected');
+
+            const clearanceLevelGroup = document.getElementById('clearanceLevelGroup');
+            if (value === 'yes') {
+                clearanceLevelGroup.classList.remove('hidden');
+            } else {
+                clearanceLevelGroup.classList.add('hidden');
+                document.getElementById('clearanceLevel').value = '';
+            }
+        }
+
+        // Form submission
+        function submitForm() {
+            alert('Application submitted! (This is a preview - in Salesforce, this would create a Contact record with USDS Lead record type)');
+        }
+    </script>
+</body>
+</html>

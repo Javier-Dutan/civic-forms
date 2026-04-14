@@ -1,0 +1,886 @@
+<apex:page controller="ApplicationFormController" showHeader="false" sidebar="false" standardStylesheets="false" docType="html-5.0">
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>USDS Application</title>
+        <style>
+            :root {
+                --space-xs: 0.375rem;
+                --space-s: 0.75rem;
+                --space-m: 1.5rem;
+                --space-l: 2.25rem;
+                --space-xl: 3rem;
+                --space-2xl: 4.5rem;
+
+                --fs-h2: clamp(1.75rem, 3vw, 2.25rem);
+                --fs-h5: 1.125rem;
+                --fs-body: 1rem;
+                --fs-meta: 0.85rem;
+                --fs-meta-smaller: 0.7rem;
+                --fw-body: 300;
+                --fw-subtitle: 500;
+                --fw-title: 600;
+
+                --primary-light: hsl(204, 15%, 92.5%);
+                --primary-light-muted: hsla(204, 15%, 92.5%, 0.6);
+                --primary-dark: hsl(204, 15%, 7.5%);
+                --primary-color: hsl(204, 100%, 40%);
+                --primary-color-light: hsl(204, 80%, 65%);
+                --secondary-color: hsl(202, 100%, 55%);
+                --tertiary-color: rgba(42, 219, 192, 0.85);
+                --accent-yellow: hsl(48, 100%, 50%);
+                --error-color: hsl(0, 72%, 60%);
+
+                --glass-bg: hsla(204, 20%, 12%, 0.65);
+                --glass-border: hsla(204, 15%, 92.5%, 0.1);
+                --glass-hover: hsla(204, 15%, 92.5%, 0.05);
+
+                --radius-card: 24px;
+                --radius-input: 10px;
+                --radius-pill: 999px;
+
+                --backdrop-blur: 20px;
+                --transition-fast: 0.15s ease;
+                --transition-normal: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+                --shadow-s: 0 2px 8px hsla(0, 0%, 0%, 0.2);
+                --shadow-m: 0 4px 24px hsla(0, 0%, 0%, 0.25);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                background-color: var(--primary-dark);
+                color: var(--primary-light);
+                line-height: 1.7;
+                font-weight: var(--fw-body);
+                letter-spacing: 0.01em;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                overflow-x: hidden;
+            }
+
+            .flag-bg {
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 0;
+                overflow: hidden;
+            }
+
+            .flag-bg .flag {
+                position: absolute;
+                font-size: 64px;
+                opacity: 0.04;
+                filter: grayscale(0.3);
+                user-select: none;
+            }
+
+            .flag-bg .flag:nth-child(1)  { top: 3%;   left: 5%;   transform: rotate(-15deg); font-size: 72px; }
+            .flag-bg .flag:nth-child(2)  { top: 8%;   right: 8%;  transform: rotate(20deg);  font-size: 56px; }
+            .flag-bg .flag:nth-child(3)  { top: 18%;  left: 80%;  transform: rotate(-8deg);  font-size: 48px; }
+            .flag-bg .flag:nth-child(4)  { top: 25%;  left: 2%;   transform: rotate(12deg);  font-size: 60px; }
+            .flag-bg .flag:nth-child(5)  { top: 35%;  right: 3%;  transform: rotate(-22deg); font-size: 52px; }
+            .flag-bg .flag:nth-child(6)  { top: 42%;  left: 8%;   transform: rotate(5deg);   font-size: 44px; }
+            .flag-bg .flag:nth-child(7)  { top: 52%;  right: 6%;  transform: rotate(18deg);  font-size: 68px; }
+            .flag-bg .flag:nth-child(8)  { top: 58%;  left: 3%;   transform: rotate(-10deg); font-size: 50px; }
+            .flag-bg .flag:nth-child(9)  { top: 68%;  right: 10%; transform: rotate(25deg);  font-size: 56px; }
+            .flag-bg .flag:nth-child(10) { top: 72%;  left: 6%;   transform: rotate(-18deg); font-size: 64px; }
+            .flag-bg .flag:nth-child(11) { top: 82%;  right: 4%;  transform: rotate(8deg);   font-size: 48px; }
+            .flag-bg .flag:nth-child(12) { top: 88%;  left: 10%;  transform: rotate(-25deg); font-size: 58px; }
+            .flag-bg .flag:nth-child(13) { top: 15%;  left: 45%;  transform: rotate(30deg);  font-size: 40px; opacity: 0.025; }
+            .flag-bg .flag:nth-child(14) { top: 48%;  left: 50%;  transform: rotate(-12deg); font-size: 36px; opacity: 0.02; }
+            .flag-bg .flag:nth-child(15) { top: 78%;  left: 42%;  transform: rotate(15deg);  font-size: 44px; opacity: 0.025; }
+            .flag-bg .flag:nth-child(16) { top: 5%;   left: 30%;  transform: rotate(10deg);  font-size: 38px; }
+            .flag-bg .flag:nth-child(17) { top: 12%;  right: 25%; transform: rotate(-20deg); font-size: 54px; }
+            .flag-bg .flag:nth-child(18) { top: 22%;  left: 55%;  transform: rotate(35deg);  font-size: 42px; opacity: 0.03; }
+            .flag-bg .flag:nth-child(19) { top: 30%;  left: 15%;  transform: rotate(-5deg);  font-size: 46px; }
+            .flag-bg .flag:nth-child(20) { top: 38%;  right: 20%; transform: rotate(28deg);  font-size: 58px; }
+            .flag-bg .flag:nth-child(21) { top: 45%;  left: 70%;  transform: rotate(-30deg); font-size: 40px; }
+            .flag-bg .flag:nth-child(22) { top: 55%;  left: 25%;  transform: rotate(15deg);  font-size: 50px; }
+            .flag-bg .flag:nth-child(23) { top: 62%;  right: 15%; transform: rotate(-8deg);  font-size: 62px; }
+            .flag-bg .flag:nth-child(24) { top: 75%;  left: 60%;  transform: rotate(22deg);  font-size: 44px; opacity: 0.03; }
+            .flag-bg .flag:nth-child(25) { top: 85%;  right: 30%; transform: rotate(-15deg); font-size: 52px; }
+            .flag-bg .flag:nth-child(26) { top: 92%;  left: 35%;  transform: rotate(18deg);  font-size: 48px; }
+            .flag-bg .flag:nth-child(27) { top: 95%;  right: 5%;  transform: rotate(-25deg); font-size: 60px; }
+            .flag-bg .flag:nth-child(28) { top: 2%;   left: 65%;  transform: rotate(8deg);   font-size: 36px; opacity: 0.03; }
+            .flag-bg .flag:nth-child(29) { top: 33%;  left: 88%;  transform: rotate(-18deg); font-size: 46px; }
+            .flag-bg .flag:nth-child(30) { top: 65%;  left: 92%;  transform: rotate(12deg);  font-size: 42px; }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: var(--space-xl) var(--space-m);
+                position: relative;
+                z-index: 1;
+            }
+
+            .form-title {
+                font-size: var(--fs-h2);
+                font-weight: var(--fw-title);
+                color: var(--primary-light);
+                margin-bottom: var(--space-xs);
+                text-align: center;
+                letter-spacing: -0.02em;
+            }
+
+            .form-subtitle {
+                color: var(--primary-light-muted);
+                text-align: center;
+                margin-bottom: var(--space-xl);
+                font-size: var(--fs-body);
+            }
+
+            .form-card {
+                background: var(--glass-bg);
+                backdrop-filter: blur(var(--backdrop-blur));
+                -webkit-backdrop-filter: blur(var(--backdrop-blur));
+                border: 1px solid var(--glass-border);
+                border-radius: var(--radius-card);
+                margin-bottom: var(--space-m);
+                overflow: hidden;
+                box-shadow: var(--shadow-s);
+            }
+
+            /* Accordion Styles */
+            .accordion-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: var(--space-m) var(--space-l);
+                cursor: pointer;
+                background: transparent;
+                border: none;
+                width: 100%;
+                text-align: left;
+                font-size: var(--fs-body);
+                font-weight: var(--fw-subtitle);
+                color: var(--primary-light);
+                transition: background-color var(--transition-fast);
+                text-decoration: none;
+            }
+
+            .accordion-header:hover {
+                background: var(--glass-hover);
+            }
+
+            .accordion-header.active {
+                background: hsla(204, 20%, 15%, 0.4);
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .accordion-icon {
+                font-size: 12px;
+                transition: transform var(--transition-normal);
+                color: var(--primary-light-muted);
+            }
+
+            .accordion-header.active .accordion-icon {
+                transform: rotate(180deg);
+            }
+
+            .accordion-content {
+                display: none;
+                padding: var(--space-m);
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .accordion-content.active {
+                display: block;
+            }
+
+            .section-description {
+                color: var(--primary-light-muted);
+                font-size: var(--fs-meta);
+                margin-bottom: var(--space-l);
+            }
+
+            /* Form Elements */
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: var(--space-s);
+                margin-bottom: var(--space-s);
+            }
+
+            .form-row.single {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group {
+                margin-bottom: var(--space-s);
+            }
+
+            .form-label {
+                display: block;
+                font-size: var(--fs-meta);
+                font-weight: var(--fw-subtitle);
+                color: var(--primary-light);
+                margin-bottom: var(--space-xs);
+            }
+
+            .form-label .optional {
+                color: hsla(204, 15%, 92.5%, 0.35);
+                font-weight: var(--fw-body);
+            }
+
+            .form-input, .form-select, .form-textarea {
+                width: 100%;
+                padding: var(--space-s) var(--space-m);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--radius-input);
+                font-size: var(--fs-body);
+                font-family: inherit;
+                color: var(--primary-light);
+                background: hsla(204, 20%, 15%, 0.5);
+                transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            }
+
+            .form-select {
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 16px center;
+                padding-right: 40px;
+            }
+
+            .form-select option {
+                background: hsl(204, 20%, 12%);
+                color: var(--primary-light);
+            }
+
+            .form-input:focus, .form-select:focus, .form-textarea:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px hsla(204, 100%, 40%, 0.15);
+            }
+
+            .form-input::placeholder {
+                color: hsla(204, 15%, 92.5%, 0.3);
+            }
+
+            .form-textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+
+            /* Radio/Checkbox Cards */
+            .option-cards {
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-s);
+            }
+
+            .option-cards table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0 var(--space-xs);
+            }
+
+            .option-cards td {
+                padding: var(--space-s) var(--space-m);
+                border: 1px solid var(--glass-border);
+                border-radius: 16px;
+                cursor: pointer;
+                transition: all var(--transition-normal);
+                color: var(--primary-light);
+                font-size: var(--fs-meta);
+            }
+
+            .option-cards td:hover {
+                border-color: hsla(204, 15%, 92.5%, 0.2);
+                background: var(--glass-hover);
+            }
+
+            .option-cards input[type="radio"] {
+                accent-color: var(--primary-color);
+            }
+
+            /* Radio Group (Yes/No style) */
+            .radio-group {
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-s);
+            }
+
+            .radio-option {
+                display: flex;
+                align-items: center;
+                gap: var(--space-s);
+                padding: var(--space-s) var(--space-m);
+                border: 1px solid var(--glass-border);
+                border-radius: 16px;
+                cursor: pointer;
+                transition: all var(--transition-normal);
+            }
+
+            .radio-option:hover {
+                border-color: hsla(204, 15%, 92.5%, 0.2);
+                background: var(--glass-hover);
+            }
+
+            .radio-option.selected {
+                border-color: var(--primary-color);
+                background: hsla(204, 100%, 40%, 0.08);
+            }
+
+            .radio-option input[type="radio"] {
+                accent-color: var(--primary-color);
+            }
+
+            .radio-text {
+                font-size: var(--fs-meta);
+                color: var(--primary-light);
+            }
+
+            /* Chip/Tag Selectors */
+            .chip-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--space-xs);
+                margin-top: var(--space-s);
+            }
+
+            .chip {
+                display: inline-flex;
+                align-items: center;
+                padding: var(--space-xs) var(--space-m);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--radius-pill);
+                font-size: var(--fs-meta);
+                color: var(--primary-light-muted);
+                background: transparent;
+                cursor: pointer;
+                transition: all var(--transition-normal);
+                text-decoration: none;
+            }
+
+            .chip:hover {
+                border-color: hsla(204, 15%, 92.5%, 0.2);
+                background: var(--glass-hover);
+                color: var(--primary-light);
+            }
+
+            .chip.selected {
+                border-color: var(--primary-color);
+                background: hsla(204, 100%, 40%, 0.15);
+                color: var(--primary-color-light);
+            }
+
+            /* Role Cards Grid */
+            .role-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-s);
+                margin-bottom: var(--space-l);
+            }
+
+            .role-card {
+                padding: var(--space-m);
+                border: 1px solid var(--glass-border);
+                border-radius: 16px;
+                cursor: pointer;
+                transition: all var(--transition-normal);
+            }
+
+            .role-card:hover {
+                border-color: hsla(204, 15%, 92.5%, 0.2);
+                background: var(--glass-hover);
+            }
+
+            .role-card.selected {
+                border-color: var(--primary-color);
+                background: hsla(204, 100%, 40%, 0.08);
+            }
+
+            .role-card-title {
+                font-weight: var(--fw-subtitle);
+                color: var(--primary-light);
+                margin-bottom: var(--space-xs);
+            }
+
+            .role-card-description {
+                font-size: var(--fs-meta);
+                color: var(--primary-light-muted);
+            }
+
+            /* Category Section */
+            .category-section {
+                margin-top: var(--space-l);
+                padding-top: var(--space-l);
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .category-label {
+                font-size: var(--fs-meta);
+                font-weight: var(--fw-subtitle);
+                color: var(--primary-light);
+                margin-bottom: var(--space-s);
+            }
+
+            /* Skills Section */
+            .skills-section {
+                margin-top: var(--space-l);
+                padding-top: var(--space-l);
+                border-top: 1px solid var(--glass-border);
+            }
+
+            /* Question Block */
+            .question-block {
+                margin-bottom: var(--space-l);
+                padding-bottom: var(--space-l);
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .question-block:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+            .question-title {
+                font-size: var(--fs-h5);
+                font-weight: var(--fw-subtitle);
+                color: var(--primary-light);
+                margin-bottom: var(--space-xs);
+            }
+
+            .question-helper {
+                font-size: var(--fs-meta);
+                color: var(--primary-light-muted);
+                margin-bottom: var(--space-m);
+                font-style: normal;
+            }
+
+            .legal-ref {
+                font-size: var(--fs-meta-smaller);
+                color: hsla(204, 15%, 92.5%, 0.35);
+                margin-top: var(--space-s);
+            }
+
+            /* File Upload */
+            .file-upload {
+                border: 2px dashed hsla(204, 15%, 92.5%, 0.15);
+                border-radius: 16px;
+                padding: var(--space-2xl) var(--space-l);
+                text-align: center;
+                cursor: pointer;
+                transition: all var(--transition-normal);
+            }
+
+            .file-upload:hover {
+                border-color: var(--primary-color);
+                background: hsla(204, 100%, 40%, 0.04);
+            }
+
+            .file-upload-text {
+                font-weight: var(--fw-subtitle);
+                color: var(--primary-light);
+                margin-bottom: var(--space-xs);
+            }
+
+            .file-upload-hint {
+                font-size: var(--fs-meta);
+                color: hsla(204, 15%, 92.5%, 0.35);
+            }
+
+            /* Submit Button */
+            .submit-section {
+                display: flex;
+                gap: var(--space-s);
+                margin-top: var(--space-xl);
+                padding-top: var(--space-l);
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .btn {
+                padding: var(--space-s) var(--space-l);
+                border-radius: var(--radius-pill);
+                font-size: var(--fs-body);
+                font-weight: var(--fw-subtitle);
+                font-family: inherit;
+                cursor: pointer;
+                transition: all var(--transition-normal);
+            }
+
+            .btn-primary {
+                background: var(--primary-color);
+                color: white;
+                border: none;
+            }
+
+            .btn-primary:hover {
+                background: var(--secondary-color);
+                box-shadow: 0 4px 16px hsla(204, 100%, 40%, 0.3);
+                transform: translateY(-1px);
+            }
+
+            .btn-primary:active {
+                transform: translateY(0) scale(0.98);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                color: var(--primary-light);
+                border: 1px solid var(--glass-border);
+            }
+
+            .btn-secondary:hover {
+                background: var(--glass-hover);
+                border-color: hsla(204, 15%, 92.5%, 0.2);
+            }
+
+            /* Error Messages */
+            .error-message {
+                background: hsla(0, 72%, 60%, 0.1);
+                border: 1px solid hsla(0, 72%, 60%, 0.3);
+                color: var(--error-color);
+                padding: var(--space-s) var(--space-m);
+                border-radius: var(--radius-input);
+                margin-bottom: var(--space-m);
+                font-size: var(--fs-meta);
+            }
+
+            /* Responsive */
+            @media (max-width: 640px) {
+                .form-row {
+                    grid-template-columns: 1fr;
+                }
+
+                .role-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .container {
+                    padding: var(--space-m);
+                }
+
+                .accordion-content {
+                    padding: var(--space-m);
+                }
+
+                .form-card {
+                    border-radius: 16px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="flag-bg">
+            <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+            <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+            <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+            <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+            <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+            <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        </div>
+        <div class="container">
+            <h1 class="form-title">Apply to USDS</h1>
+            <p class="form-subtitle">Help us match you with the right role by telling us about your background and interests.</p>
+
+            <apex:form id="applicationForm">
+                <apex:pageMessages />
+
+                <!-- Section 1: Contact Information -->
+                <div class="form-card">
+                    <apex:commandLink action="{!setSection}" rerender="applicationForm" styleClass="accordion-header {!IF(activeSection == 'contact', 'active', '')}">
+                        <apex:param name="section" value="contact" assignTo="{!activeSection}"/>
+                        <span>Contact Information</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </apex:commandLink>
+                    <div class="accordion-content {!IF(activeSection == 'contact', 'active', '')}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <apex:inputText value="{!firstName}" styleClass="form-input" html-placeholder="Jane"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <apex:inputText value="{!lastName}" styleClass="form-input" html-placeholder="Smith"/>
+                            </div>
+                        </div>
+
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <apex:inputText value="{!email}" styleClass="form-input" html-placeholder="jane.smith@email.com"/>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Phone <span class="optional">(Optional)</span></label>
+                                <apex:inputText value="{!phone}" styleClass="form-input" html-placeholder="(555) 123-4567"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">LinkedIn <span class="optional">(Optional)</span></label>
+                                <apex:inputText value="{!linkedIn}" styleClass="form-input" html-placeholder="linkedin.com/in/janesmith"/>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Current Location</label>
+                                <apex:selectList value="{!currentLocation}" size="1" styleClass="form-select">
+                                    <apex:selectOptions value="{!stateOptions}"/>
+                                </apex:selectList>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Earliest Start Date</label>
+                                <apex:input type="date" value="{!earliestStartDate}" styleClass="form-input"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Role & Skills -->
+                <div class="form-card">
+                    <apex:commandLink action="{!setSection}" rerender="applicationForm" styleClass="accordion-header {!IF(activeSection == 'role', 'active', '')}">
+                        <apex:param name="section" value="role" assignTo="{!activeSection}"/>
+                        <span>Role &amp; Skills</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </apex:commandLink>
+                    <div class="accordion-content {!IF(activeSection == 'role', 'active', '')}">
+                        <p class="section-description">What type of work are you looking for?</p>
+
+                        <div class="form-group">
+                            <label class="form-label">Primary Role</label>
+                            <apex:selectList value="{!selectedRole}" size="1" styleClass="form-select">
+                                <apex:selectOptions value="{!roleOptions}"/>
+                                <apex:actionSupport event="onchange" action="{!onRoleChange}" rerender="applicationForm"/>
+                            </apex:selectList>
+                        </div>
+
+                        <!-- Categories (shown when role is selected) -->
+                        <apex:outputPanel rendered="{!categoryItems.size > 0}">
+                            <div class="category-section">
+                                <label class="category-label">Select Categories</label>
+                                <p class="section-description">Choose the areas where you have expertise.</p>
+                                <div class="chip-container">
+                                    <apex:repeat value="{!categoryItems}" var="cat">
+                                        <apex:commandLink action="{!toggleCategory}" rerender="applicationForm"
+                                                          styleClass="chip {!IF(cat.selected, 'selected', '')}">
+                                            <apex:param name="catName" value="{!cat.name}"/>
+                                            {!cat.name}
+                                        </apex:commandLink>
+                                    </apex:repeat>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+
+                        <!-- Skills (shown when categories are selected) -->
+                        <apex:outputPanel rendered="{!skillItems.size > 0}">
+                            <div class="skills-section">
+                                <label class="category-label">Select Skills</label>
+                                <p class="section-description">Select all that apply to help us match you with the right projects.</p>
+                                <div class="chip-container">
+                                    <apex:repeat value="{!skillItems}" var="skill">
+                                        <apex:commandLink action="{!toggleSkill}" rerender="applicationForm"
+                                                          styleClass="chip {!IF(skill.selected, 'selected', '')}">
+                                            <apex:param name="skillName" value="{!skill.name}"/>
+                                            {!skill.name}
+                                        </apex:commandLink>
+                                    </apex:repeat>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+
+                        <div class="form-row" style="margin-top: var(--space-l);">
+                            <div class="form-group">
+                                <label class="form-label">Years of Experience</label>
+                                <apex:selectList value="{!yearsOfExperience}" size="1" styleClass="form-select">
+                                    <apex:selectOptions value="{!yearsOptions}"/>
+                                </apex:selectList>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Target Level</label>
+                                <apex:selectList value="{!targetLevel}" size="1" styleClass="form-select">
+                                    <apex:selectOptions value="{!levelOptions}"/>
+                                </apex:selectList>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Eligibility & Clearance -->
+                <div class="form-card">
+                    <apex:commandLink action="{!setSection}" rerender="applicationForm" styleClass="accordion-header {!IF(activeSection == 'eligibility', 'active', '')}">
+                        <apex:param name="section" value="eligibility" assignTo="{!activeSection}"/>
+                        <span>Eligibility &amp; Clearance</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </apex:commandLink>
+                    <div class="accordion-content {!IF(activeSection == 'eligibility', 'active', '')}">
+
+                        <div class="question-block">
+                            <p class="question-title">Are you a United States citizen?</p>
+                            <p class="question-helper">U.S. citizenship is required for all USDS positions due to access to sensitive federal systems.</p>
+                            <div class="option-cards">
+                                <label class="option-card">
+                                    <apex:selectRadio value="{!isCitizen}" layout="pageDirection">
+                                        <apex:selectOption itemValue="Yes" itemLabel="Yes - I am a United States citizen by birth or naturalization."/>
+                                        <apex:selectOption itemValue="No" itemLabel="No - I am not a United States citizen."/>
+                                    </apex:selectRadio>
+                                </label>
+                            </div>
+                            <p class="legal-ref">5 U.S.C. &sect; 3301</p>
+                        </div>
+
+                        <div class="question-block">
+                            <p class="question-title">Are you able to work in Washington, D.C.?</p>
+                            <p class="question-helper">USDS is headquartered in the Executive Office of the President. While hybrid arrangements may be available, regular on-site presence in D.C. is expected.</p>
+                            <apex:selectRadio value="{!canWorkInDC}" layout="pageDirection" styleClass="option-cards">
+                                <apex:selectOption itemValue="Yes" itemLabel="Yes - I am able to work on-site in Washington, D.C. as required."/>
+                                <apex:selectOption itemValue="No" itemLabel="No - I require fully remote work arrangements."/>
+                            </apex:selectRadio>
+                        </div>
+
+                        <div class="question-block">
+                            <p class="question-title">Are you comfortable with federal government compensation?</p>
+                            <p class="question-helper">USDS positions are typically GS-13 through GS-15, with salaries ranging from approximately $120,000 to $195,000 based on experience and locality.</p>
+                            <apex:selectRadio value="{!acceptsCompensation}" layout="pageDirection" styleClass="option-cards">
+                                <apex:selectOption itemValue="Yes" itemLabel="Yes - I understand and accept the federal compensation structure."/>
+                                <apex:selectOption itemValue="No" itemLabel="No - The compensation range does not meet my requirements."/>
+                            </apex:selectRadio>
+                            <p class="legal-ref">OPM General Schedule Pay Tables</p>
+                        </div>
+
+                        <div class="question-block">
+                            <p class="question-title">Can you complete a federal background investigation?</p>
+                            <p class="question-helper">All federal employees undergo a background check that reviews employment history, education, criminal records, credit history, and references.</p>
+                            <apex:selectRadio value="{!canPassBackground}" layout="pageDirection" styleClass="option-cards">
+                                <apex:selectOption itemValue="Yes" itemLabel="Yes - I am willing to undergo a background investigation."/>
+                                <apex:selectOption itemValue="Uncertain" itemLabel="No / Uncertain - I have concerns regarding my ability to complete a background investigation."/>
+                            </apex:selectRadio>
+                            <p class="legal-ref">5 CFR &sect; 731</p>
+                        </div>
+
+                        <div class="question-block">
+                            <p class="question-title">Can you pass a pre-employment drug test?</p>
+                            <p class="question-helper">The federal government maintains a drug-free workplace. Pre-employment testing is required, with possible random testing thereafter. This includes marijuana regardless of state laws.</p>
+                            <apex:selectRadio value="{!canPassDrugTest}" layout="pageDirection" styleClass="option-cards">
+                                <apex:selectOption itemValue="Yes" itemLabel="Yes - I am able to comply with federal drug-free workplace requirements."/>
+                                <apex:selectOption itemValue="No" itemLabel="No - I am unable to comply with these requirements at this time."/>
+                            </apex:selectRadio>
+                            <p class="legal-ref">Executive Order 12564</p>
+                        </div>
+
+                        <div class="question-block">
+                            <p class="question-title">Are you interested in a term of service of at least one year?</p>
+                            <p class="question-helper">USDS tours are typically 1-2 years, with extensions possible up to 4 years. Team members have the greatest impact with a commitment of 12 months or more.</p>
+                            <apex:selectRadio value="{!commitmentLength}" layout="pageDirection" styleClass="option-cards">
+                                <apex:selectOption itemValue="Yes" itemLabel="Yes - I'm interested in a commitment of one year or more."/>
+                                <apex:selectOption itemValue="Not sure" itemLabel="Not sure - I'm interested but may only be available for a shorter period."/>
+                            </apex:selectRadio>
+                        </div>
+
+                        <div class="question-block">
+                            <p class="question-title">Do you currently hold a security clearance?</p>
+                            <p class="question-helper">Some roles require security clearances. This helps us identify opportunities.</p>
+                            <apex:inputHidden value="{!hasClearance}" id="hasClearanceVal"/>
+                            <div class="radio-group" id="hasClearanceGroup">
+                                <label class="radio-option" id="clearance-yes" onclick="toggleClearanceLevel('yes')">
+                                    <input type="radio" name="hasClearance" value="yes"/>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option" id="clearance-no" onclick="toggleClearanceLevel('no')">
+                                    <input type="radio" name="hasClearance" value="no"/>
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+
+                            <!-- Clearance level - only shown if Yes -->
+                            <div id="clearanceLevelSection" style="display: none; margin-top: var(--space-m);">
+                                <label class="form-label">What level of clearance do you hold?</label>
+                                <apex:selectList value="{!securityClearance}" size="1" styleClass="form-select">
+                                    <apex:selectOption itemValue="" itemLabel="Select clearance level..."/>
+                                    <apex:selectOption itemValue="Public Trust" itemLabel="Public Trust"/>
+                                    <apex:selectOption itemValue="Secret" itemLabel="Secret"/>
+                                    <apex:selectOption itemValue="Top Secret" itemLabel="Top Secret"/>
+                                    <apex:selectOption itemValue="TS/SCI" itemLabel="TS/SCI"/>
+                                </apex:selectList>
+                            </div>
+                        </div>
+
+                        <div class="question-block">
+                            <p class="question-title">Have you previously worked for the federal government?</p>
+                            <apex:selectRadio value="{!previousFedEmployee}" layout="pageDirection" styleClass="option-cards">
+                                <apex:selectOption itemValue="Yes" itemLabel="Yes"/>
+                                <apex:selectOption itemValue="No" itemLabel="No"/>
+                            </apex:selectRadio>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Resume & Additional Info -->
+                <div class="form-card">
+                    <apex:commandLink action="{!setSection}" rerender="applicationForm" styleClass="accordion-header {!IF(activeSection == 'resume', 'active', '')}">
+                        <apex:param name="section" value="resume" assignTo="{!activeSection}"/>
+                        <span>Resume &amp; Additional Info</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </apex:commandLink>
+                    <div class="accordion-content {!IF(activeSection == 'resume', 'active', '')}">
+                        <p class="section-description">Share your background and anything else you'd like us to know.</p>
+
+                        <div class="form-group">
+                            <label class="form-label">Upload Resume</label>
+                            <div class="file-upload">
+                                <apex:inputFile value="{!resume}" contentType="{!resumeContentType}" fileName="{!resumeFileName}"/>
+                                <p class="file-upload-text">Click to upload or drag and drop</p>
+                                <p class="file-upload-hint">PDF only, 2 pages max, 5MB limit</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Portfolio or GitHub <span class="optional">(Optional)</span></label>
+                            <apex:inputText value="{!portfolioUrl}" styleClass="form-input" html-placeholder="https://github.com/janesmith"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Why are you interested in USDS? <span class="optional">(Optional)</span></label>
+                            <apex:inputTextarea value="{!whyUsds}" styleClass="form-textarea" html-placeholder="Tell us what draws you to public service and what you hope to accomplish..."/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">How did you hear about us?</label>
+                            <apex:selectList value="{!howDidYouHear}" size="1" styleClass="form-select">
+                                <apex:selectOptions value="{!referralOptions}"/>
+                            </apex:selectList>
+                        </div>
+
+                        <div class="submit-section">
+                            <apex:commandButton action="{!submitApplication}" value="Submit Application" styleClass="btn btn-primary"/>
+                        </div>
+                    </div>
+                </div>
+            </apex:form>
+        </div>
+        <script>
+            function toggleClearanceLevel(value) {
+                var yesOption = document.getElementById('clearance-yes');
+                var noOption = document.getElementById('clearance-no');
+                var clearanceSection = document.getElementById('clearanceLevelSection');
+
+                // Update selection styling
+                yesOption.classList.remove('selected');
+                noOption.classList.remove('selected');
+
+                // Set hidden field value for controller binding
+                document.querySelector('[id$="hasClearanceVal"]').value = value;
+
+                if (value === 'yes') {
+                    yesOption.classList.add('selected');
+                    clearanceSection.style.display = 'block';
+                } else {
+                    noOption.classList.add('selected');
+                    clearanceSection.style.display = 'none';
+                }
+            }
+        </script>
+    </body>
+    </html>
+</apex:page>
