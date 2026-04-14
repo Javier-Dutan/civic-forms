@@ -1,2 +1,9 @@
 .DS_Store
 *.log
+Examples/
+ApplicationForm/
+ApplicationFormController/
+Untitled.csv
+package-lock.json
+skills-csv.txt
+node_modules/
