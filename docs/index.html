@@ -41,24 +41,27 @@
 
         .flag-bg .flag {
             position: absolute;
-            font-size: 64px;
             opacity: 0.04;
-            filter: grayscale(0.3);
             user-select: none;
+            display: block;
+            aspect-ratio: 19 / 10;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 190 100'%3E%3Crect width='190' height='100' fill='%23B22234'/%3E%3Crect y='7.69' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='23.08' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='38.46' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='53.85' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='69.23' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='84.62' width='190' height='7.69' fill='%23fff'/%3E%3Crect width='76' height='53.85' fill='%233C3B6E'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
         }
 
-        .flag-bg .flag:nth-child(1)  { top: 5%;   left: 5%;   transform: rotate(-15deg); font-size: 80px; }
-        .flag-bg .flag:nth-child(2)  { top: 10%;  right: 8%;  transform: rotate(20deg);  font-size: 60px; }
-        .flag-bg .flag:nth-child(3)  { top: 25%;  left: 80%;  transform: rotate(-8deg);  font-size: 50px; }
-        .flag-bg .flag:nth-child(4)  { top: 30%;  left: 2%;   transform: rotate(12deg);  font-size: 70px; }
-        .flag-bg .flag:nth-child(5)  { top: 50%;  right: 5%;  transform: rotate(-22deg); font-size: 55px; }
-        .flag-bg .flag:nth-child(6)  { top: 60%;  left: 8%;   transform: rotate(5deg);   font-size: 48px; }
-        .flag-bg .flag:nth-child(7)  { top: 75%;  right: 10%; transform: rotate(18deg);  font-size: 72px; }
-        .flag-bg .flag:nth-child(8)  { top: 85%;  left: 15%;  transform: rotate(-10deg); font-size: 56px; }
-        .flag-bg .flag:nth-child(9)  { top: 15%;  left: 40%;  transform: rotate(30deg);  font-size: 44px; opacity: 0.025; }
-        .flag-bg .flag:nth-child(10) { top: 45%;  left: 50%;  transform: rotate(-12deg); font-size: 38px; opacity: 0.02; }
-        .flag-bg .flag:nth-child(11) { top: 70%;  left: 55%;  transform: rotate(15deg);  font-size: 46px; opacity: 0.025; }
-        .flag-bg .flag:nth-child(12) { top: 90%;  right: 30%; transform: rotate(-18deg); font-size: 52px; }
+        .flag-bg .flag:nth-child(1)  { top: 5%;   left: 5%;   transform: rotate(-15deg); width: 100px; }
+        .flag-bg .flag:nth-child(2)  { top: 10%;  right: 8%;  transform: rotate(20deg);  width: 75px; }
+        .flag-bg .flag:nth-child(3)  { top: 25%;  left: 80%;  transform: rotate(-8deg);  width: 62px; }
+        .flag-bg .flag:nth-child(4)  { top: 30%;  left: 2%;   transform: rotate(12deg);  width: 88px; }
+        .flag-bg .flag:nth-child(5)  { top: 50%;  right: 5%;  transform: rotate(-22deg); width: 68px; }
+        .flag-bg .flag:nth-child(6)  { top: 60%;  left: 8%;   transform: rotate(5deg);   width: 60px; }
+        .flag-bg .flag:nth-child(7)  { top: 75%;  right: 10%; transform: rotate(18deg);  width: 90px; }
+        .flag-bg .flag:nth-child(8)  { top: 85%;  left: 15%;  transform: rotate(-10deg); width: 70px; }
+        .flag-bg .flag:nth-child(9)  { top: 15%;  left: 40%;  transform: rotate(30deg);  width: 55px; opacity: 0.025; }
+        .flag-bg .flag:nth-child(10) { top: 45%;  left: 50%;  transform: rotate(-12deg); width: 48px; opacity: 0.02; }
+        .flag-bg .flag:nth-child(11) { top: 70%;  left: 55%;  transform: rotate(15deg);  width: 58px; opacity: 0.025; }
+        .flag-bg .flag:nth-child(12) { top: 90%;  right: 30%; transform: rotate(-18deg); width: 65px; }
 
         .wrapper {
             position: relative;
@@ -149,9 +152,9 @@
 </head>
 <body>
     <div class="flag-bg">
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
     </div>
     <div class="wrapper">
         <h1>USDS Forms Preview</h1>

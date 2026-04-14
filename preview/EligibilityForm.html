@@ -75,42 +75,45 @@
 
         .flag-bg .flag {
             position: absolute;
-            font-size: 64px;
             opacity: 0.04;
-            filter: grayscale(0.3);
             user-select: none;
+            display: block;
+            aspect-ratio: 19 / 10;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 190 100'%3E%3Crect width='190' height='100' fill='%23B22234'/%3E%3Crect y='7.69' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='23.08' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='38.46' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='53.85' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='69.23' width='190' height='7.69' fill='%23fff'/%3E%3Crect y='84.62' width='190' height='7.69' fill='%23fff'/%3E%3Crect width='76' height='53.85' fill='%233C3B6E'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
         }
 
-        .flag-bg .flag:nth-child(1)  { top: 3%;   left: 5%;   transform: rotate(-15deg); font-size: 72px; }
-        .flag-bg .flag:nth-child(2)  { top: 8%;   right: 8%;  transform: rotate(20deg);  font-size: 56px; }
-        .flag-bg .flag:nth-child(3)  { top: 18%;  left: 80%;  transform: rotate(-8deg);  font-size: 48px; }
-        .flag-bg .flag:nth-child(4)  { top: 25%;  left: 2%;   transform: rotate(12deg);  font-size: 60px; }
-        .flag-bg .flag:nth-child(5)  { top: 35%;  right: 3%;  transform: rotate(-22deg); font-size: 52px; }
-        .flag-bg .flag:nth-child(6)  { top: 42%;  left: 8%;   transform: rotate(5deg);   font-size: 44px; }
-        .flag-bg .flag:nth-child(7)  { top: 52%;  right: 6%;  transform: rotate(18deg);  font-size: 68px; }
-        .flag-bg .flag:nth-child(8)  { top: 58%;  left: 3%;   transform: rotate(-10deg); font-size: 50px; }
-        .flag-bg .flag:nth-child(9)  { top: 68%;  right: 10%; transform: rotate(25deg);  font-size: 56px; }
-        .flag-bg .flag:nth-child(10) { top: 72%;  left: 6%;   transform: rotate(-18deg); font-size: 64px; }
-        .flag-bg .flag:nth-child(11) { top: 82%;  right: 4%;  transform: rotate(8deg);   font-size: 48px; }
-        .flag-bg .flag:nth-child(12) { top: 88%;  left: 10%;  transform: rotate(-25deg); font-size: 58px; }
-        .flag-bg .flag:nth-child(13) { top: 15%;  left: 45%;  transform: rotate(30deg);  font-size: 40px; opacity: 0.025; }
-        .flag-bg .flag:nth-child(14) { top: 48%;  left: 50%;  transform: rotate(-12deg); font-size: 36px; opacity: 0.02; }
-        .flag-bg .flag:nth-child(15) { top: 78%;  left: 42%;  transform: rotate(15deg);  font-size: 44px; opacity: 0.025; }
-        .flag-bg .flag:nth-child(16) { top: 5%;   left: 30%;  transform: rotate(10deg);  font-size: 38px; }
-        .flag-bg .flag:nth-child(17) { top: 12%;  right: 25%; transform: rotate(-20deg); font-size: 54px; }
-        .flag-bg .flag:nth-child(18) { top: 22%;  left: 55%;  transform: rotate(35deg);  font-size: 42px; opacity: 0.03; }
-        .flag-bg .flag:nth-child(19) { top: 30%;  left: 15%;  transform: rotate(-5deg);  font-size: 46px; }
-        .flag-bg .flag:nth-child(20) { top: 38%;  right: 20%; transform: rotate(28deg);  font-size: 58px; }
-        .flag-bg .flag:nth-child(21) { top: 45%;  left: 70%;  transform: rotate(-30deg); font-size: 40px; }
-        .flag-bg .flag:nth-child(22) { top: 55%;  left: 25%;  transform: rotate(15deg);  font-size: 50px; }
-        .flag-bg .flag:nth-child(23) { top: 62%;  right: 15%; transform: rotate(-8deg);  font-size: 62px; }
-        .flag-bg .flag:nth-child(24) { top: 75%;  left: 60%;  transform: rotate(22deg);  font-size: 44px; opacity: 0.03; }
-        .flag-bg .flag:nth-child(25) { top: 85%;  right: 30%; transform: rotate(-15deg); font-size: 52px; }
-        .flag-bg .flag:nth-child(26) { top: 92%;  left: 35%;  transform: rotate(18deg);  font-size: 48px; }
-        .flag-bg .flag:nth-child(27) { top: 95%;  right: 5%;  transform: rotate(-25deg); font-size: 60px; }
-        .flag-bg .flag:nth-child(28) { top: 2%;   left: 65%;  transform: rotate(8deg);   font-size: 36px; opacity: 0.03; }
-        .flag-bg .flag:nth-child(29) { top: 33%;  left: 88%;  transform: rotate(-18deg); font-size: 46px; }
-        .flag-bg .flag:nth-child(30) { top: 65%;  left: 92%;  transform: rotate(12deg);  font-size: 42px; }
+        .flag-bg .flag:nth-child(1)  { top: 3%;   left: 5%;   transform: rotate(-15deg); width: 90px; }
+        .flag-bg .flag:nth-child(2)  { top: 8%;   right: 8%;  transform: rotate(20deg);  width: 70px; }
+        .flag-bg .flag:nth-child(3)  { top: 18%;  left: 80%;  transform: rotate(-8deg);  width: 60px; }
+        .flag-bg .flag:nth-child(4)  { top: 25%;  left: 2%;   transform: rotate(12deg);  width: 75px; }
+        .flag-bg .flag:nth-child(5)  { top: 35%;  right: 3%;  transform: rotate(-22deg); width: 65px; }
+        .flag-bg .flag:nth-child(6)  { top: 42%;  left: 8%;   transform: rotate(5deg);   width: 55px; }
+        .flag-bg .flag:nth-child(7)  { top: 52%;  right: 6%;  transform: rotate(18deg);  width: 85px; }
+        .flag-bg .flag:nth-child(8)  { top: 58%;  left: 3%;   transform: rotate(-10deg); width: 62px; }
+        .flag-bg .flag:nth-child(9)  { top: 68%;  right: 10%; transform: rotate(25deg);  width: 70px; }
+        .flag-bg .flag:nth-child(10) { top: 72%;  left: 6%;   transform: rotate(-18deg); width: 80px; }
+        .flag-bg .flag:nth-child(11) { top: 82%;  right: 4%;  transform: rotate(8deg);   width: 60px; }
+        .flag-bg .flag:nth-child(12) { top: 88%;  left: 10%;  transform: rotate(-25deg); width: 72px; }
+        .flag-bg .flag:nth-child(13) { top: 15%;  left: 45%;  transform: rotate(30deg);  width: 50px; opacity: 0.025; }
+        .flag-bg .flag:nth-child(14) { top: 48%;  left: 50%;  transform: rotate(-12deg); width: 45px; opacity: 0.02; }
+        .flag-bg .flag:nth-child(15) { top: 78%;  left: 42%;  transform: rotate(15deg);  width: 55px; opacity: 0.025; }
+        .flag-bg .flag:nth-child(16) { top: 5%;   left: 30%;  transform: rotate(10deg);  width: 48px; }
+        .flag-bg .flag:nth-child(17) { top: 12%;  right: 25%; transform: rotate(-20deg); width: 68px; }
+        .flag-bg .flag:nth-child(18) { top: 22%;  left: 55%;  transform: rotate(35deg);  width: 52px; opacity: 0.03; }
+        .flag-bg .flag:nth-child(19) { top: 30%;  left: 15%;  transform: rotate(-5deg);  width: 58px; }
+        .flag-bg .flag:nth-child(20) { top: 38%;  right: 20%; transform: rotate(28deg);  width: 72px; }
+        .flag-bg .flag:nth-child(21) { top: 45%;  left: 70%;  transform: rotate(-30deg); width: 50px; }
+        .flag-bg .flag:nth-child(22) { top: 55%;  left: 25%;  transform: rotate(15deg);  width: 62px; }
+        .flag-bg .flag:nth-child(23) { top: 62%;  right: 15%; transform: rotate(-8deg);  width: 78px; }
+        .flag-bg .flag:nth-child(24) { top: 75%;  left: 60%;  transform: rotate(22deg);  width: 55px; opacity: 0.03; }
+        .flag-bg .flag:nth-child(25) { top: 85%;  right: 30%; transform: rotate(-15deg); width: 65px; }
+        .flag-bg .flag:nth-child(26) { top: 92%;  left: 35%;  transform: rotate(18deg);  width: 60px; }
+        .flag-bg .flag:nth-child(27) { top: 95%;  right: 5%;  transform: rotate(-25deg); width: 75px; }
+        .flag-bg .flag:nth-child(28) { top: 2%;   left: 65%;  transform: rotate(8deg);   width: 45px; opacity: 0.03; }
+        .flag-bg .flag:nth-child(29) { top: 33%;  left: 88%;  transform: rotate(-18deg); width: 58px; }
+        .flag-bg .flag:nth-child(30) { top: 65%;  left: 92%;  transform: rotate(12deg);  width: 52px; }
 
         .container {
             max-width: 720px;
@@ -335,12 +338,12 @@
 </head>
 <body>
     <div class="flag-bg">
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
-        <span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span><span class="flag">&#127482;&#127480;</span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span><span class="flag"></span>
     </div>
     <div class="container">
         <div class="form-card">
